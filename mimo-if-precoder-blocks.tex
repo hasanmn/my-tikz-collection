@@ -15,7 +15,8 @@
 \begin{document}
 \begin{tikzpicture}[>=stealth, y=1.5cm, thick]
   \tikzset{smallbox/.style = { draw, rectangle, minimum width = 0.75cm, minimum height = 0.7cm }}
-  \tikzset{bigbox/.style={rotate=90, draw, rectangle, minimum width=1.5*4cm, minimum height=1cm}}
+  \tikzset{bigbox/.style={ draw, rectangle, minimum height=1.5*4cm, minimum width=1cm}}
+  \tikzset{textbox/.style={ rotate=90}}
 %  \draw [gray, very thin] (0,0) grid (14,5);
 %  \path [gray, very thin] (0,0) grid (14,5);
   % \foreach \x in {1,...,14} \node at (\x,0) {\x};
@@ -32,19 +33,21 @@
   
   \fill (1,2) circle (1.5pt) +(0,0.25) circle(1.5pt) +(0,-0.25) circle(1.5pt);
   
-  \node[name = P, bigbox] at (2.5,2.5){$\mbf{V} \mbf P$};
+  \node[name = P, bigbox] at (2.5,2.5){};
+  \node[textbox] at (2.5,2.5){$\mbf{V} \mbf P$};
 
   
-  \draw [->] (enc1) -- +(1,0) node[midway, above]{$\mbf x_1$};
-  \draw [->] (enc2) -- +(1,0) node[midway, above]{$\mbf x_2$};
-  \draw [->] (encN) -- +(1,0) node[midway, above]{$\mbf x_N$};
+  \draw [->] (enc1) -- (enc1-|P.west) node[midway, above]{$\mbf x_1$};
+  \draw [->] (enc2) -- (enc2-|P.west) node[midway, above]{$\mbf x_2$};
+  \draw [->] (encN) -- (encN-|P.west) node[midway, above]{$\mbf x_N$};
   
-  \node[name = H, bigbox] at (4,2.5){$\mbf H = \mbf W \mbf D \mbf V^H$};
+  \node[name = H, bigbox] at (4,2.5){};
+  \node[textbox] at (4,2.5){$\mbf H = \mbf W \mbf D \mbf V^H$};
   
-  \draw [->] (enc1)  ++(2,0) -- ++(0.5,0);
-  \draw [->] (enc2)  ++(2,0) -- ++(0.5,0);
-  \draw [->] (encN)  ++(2,0) -- ++(0.5,0);
-
+  \draw [->] (enc1-|P.east) -- (enc1-|H.west);
+  \draw [->] (enc2-|P.east) -- (enc2-|H.west);
+  \draw [->] (encN-|P.east) -- (encN-|H.west);
+  
   % \node[name=c1, circle, radius=1cm, draw] at  (0,0) {};
   % \draw (c1.north) -- (c1.south);
   \myOplus{z1}{5.25}{4}{1}
@@ -53,37 +56,39 @@
 
   \fill (5.25,2) circle (1.5pt) +(0,0.25) circle(1.5pt) +(0,-0.25) circle(1.5pt);
   
-  \draw [->] (4.5,4) -- (z1);
-  \draw [->] (4.5,3) -- (z2);
-  \draw [->] (4.5,1) -- (zN);
+  \draw [->] (z1-|H.east) -- (z1);
+  \draw [->] (z2-|H.east) -- (z2);
+  \draw [->] (zN-|H.east) -- (zN);
 
-  \node[name = W, bigbox] at (6.5,2.5){$\mbf{W}^H$};
+  \node[name = W, bigbox] at (6.5,2.5){};
+  \node[textbox] at (6.5,2.5){$\mbf{W}^H$};
 
-  \draw [->] (z1) -- (6,4) node[midway, above]{$\mbf y_1$}; 
-  \draw [->] (z2) -- (6,3) node[midway, above]{$\mbf y_2$};
-  \draw [->] (zN) -- (6,1) node[midway, above]{$\mbf y_N$};
+  \draw [->] (z1) -- (z1-|W.west) node[midway, above]{$\mbf y_1$}; 
+  \draw [->] (z2) -- (z2-|W.west) node[midway, above]{$\mbf y_2$};
+  \draw [->] (zN) -- (zN-|W.west) node[midway, above]{$\mbf y_N$};
 
-  \node[name = W, bigbox] at (8,2.5){$\mbf{B}$};
+  \node[name = B, bigbox] at (8,2.5){$\mbf{B}$};
 
-  \draw [->] (7,4) -- +(0.5,0);
-  \draw [->] (7,3) -- +(0.5,0);
-  \draw [->] (7,1) -- +(0.5,0);
+  \draw [->] (z1-|W.east) -- (z1-|B.west);
+  \draw [->] (z2-|W.east) -- (z2-|B.west);
+  \draw [->] (zN-|W.east) -- (zN-|B.west);
 
   \node[name = DecN, smallbox] at (9.75,1) {$\mcal D_N$};
   \node[name = Dec2, smallbox] at (9.75,3) {$\mcal D_2$};
   \node[name = Dec1, smallbox] at (9.75,4) {$\mcal D_1$};
 
-  \draw [->] (8.5,4) -- (Dec1) node[midway, above]{$\mbf y_{\eff,1}$};
-  \draw [->] (8.5,3) -- (Dec2) node[midway, above]{$\mbf y_{\eff,2}$};
-  \draw [->] (8.5,1) -- (DecN) node[midway, above]{$\mbf y_{\eff,N}$};
+  \draw [->] (B.east|-Dec1) -- (Dec1) node[midway, above]{$\mbf y_{\eff,1}$};
+  \draw [->] (B.east|-Dec2) -- (Dec2) node[midway, above]{$\mbf y_{\eff,2}$};
+  \draw [->] (B.east|-DecN) -- (DecN) node[midway, above]{$\mbf y_{\eff,N}$};
   
   \fill (9.75,2) circle (1.5pt) +(0,0.25) circle(1.5pt) +(0,-0.25) circle(1.5pt);
 
-  \node[name = A, bigbox] at (11.25,2.5){$\mbf{A}^{-1}$};
+  \node[name = A, bigbox] at (11.25,2.5){};
+  \node[textbox] at (11.25,2.5){$\mbf{A}^{-1}$};
 
-  \draw [->] (Dec1) -- (10.75,4) node[midway, above]{$\hat{\mbf c}_{1}$};
-  \draw [->] (Dec2) -- (10.75,3) node[midway, above]{$\hat{\mbf c}_{2}$};
-  \draw [->] (DecN) -- (10.75,1) node[midway, above]{$\hat{\mbf c}_{N}$};
+  \draw [->] (Dec1) -- (Dec1 -| A.west) node[midway, above]{$\hat{\mbf c}_{1}$};
+  \draw [->] (Dec2) -- (Dec2 -| A.west) node[midway, above]{$\hat{\mbf c}_{2}$};
+  \draw [->] (DecN) -- (DecN -| A.west) node[midway, above]{$\hat{\mbf c}_{N}$};
 
   \node[name = inv1, smallbox] at (12.75,4) {$\mcal E_1^{-1}$};
   \node[name = inv2, smallbox] at (12.75,3) {$\mcal E_2^{-1}$};
@@ -91,13 +96,13 @@
   
   \fill (12.75,2) circle (1.5pt) +(0,0.25) circle(1.5pt) +(0,-0.25) circle(1.5pt);
 
-  \draw [->] (11.75,4) -- (inv1) node[midway, above]{$\hat{\mbf x}_{1}$};
-  \draw [->] (11.75,3) -- (inv2) node[midway, above]{$\hat{\mbf x}_{2}$};
-  \draw [->] (11.75,1) -- (invN) node[midway, above]{$\hat{\mbf x}_{N}$};
+  \draw [->] (A.east |- inv1) -- (inv1) node[midway, above]{$\hat{\mbf x}_{1}$};
+  \draw [->] (A.east |- inv2) -- (inv2) node[midway, above]{$\hat{\mbf x}_{2}$};
+  \draw [->] (A.east |- invN) -- (invN) node[midway, above]{$\hat{\mbf x}_{N}$};
 
-  \draw [->] (inv1) -- (13.75,4) node[midway, above]{$\hat{\mbf w}_{1}$};
-  \draw [->] (inv2) -- (13.75,3) node[midway, above]{$\hat{\mbf w}_{2}$};
-  \draw [->] (invN) -- (13.75,1) node[midway, above]{$\hat{\mbf w}_{N}$};
+  \draw [->] (inv1.east) -- +(0.5,0) node[midway, above]{$\hat{\mbf w}_{1}$};
+  \draw [->] (inv2.east) -- +(0.5,0) node[midway, above]{$\hat{\mbf w}_{2}$};
+  \draw [->] (invN.east) -- +(0.5,0) node[midway, above]{$\hat{\mbf w}_{N}$};
 \end{tikzpicture}
 \end{document}
 %%% Local Variables:
