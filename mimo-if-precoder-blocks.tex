@@ -8,9 +8,10 @@
 \newcommand{\mcal}[1]{\mathcal #1}
 \newcommand{\eff}{\textrm{eff}}
 \newcommand{\myOplus}[4]{
-  \node[name=#1, circle, radius=1, draw, label=$\mbf z_{#4}$] at  (#2,#3) {};
+  \node[name=#1, circle, radius=1, draw,] at  (#2,#3) {};
   \draw (#1.north) -- (#1.south);
   \draw (#1.west) -- (#1.east);
+  \draw[<-] (#1.north) -- ++(0,0.2) node[above] {$\mbf z_{#4}$};
 }
 \begin{document}
 \begin{tikzpicture}[>=stealth, y=1.5cm, thick]
